@@ -7,11 +7,6 @@ from users.models import Payments, User
 from users.serializers import PaymentsSerializer, UsersSerializer
 
 
-# class UsersListAPIView(ListAPIView):
-#     serializer_class = UsersSerializer
-#     queryset = User.objects.all()
-#     filter_backends = [SearchFilter, OrderingFilter]
-
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UsersSerializer
     queryset = User.objects.all()
