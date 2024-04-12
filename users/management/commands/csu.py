@@ -8,7 +8,7 @@ from users.models import User
 class Command(BaseCommand):
     def handle(self, *args, **options):
         user = User.objects.create(
-            email="admin2@sky.pro",
+            email="admin@sky.pro",
             is_staff=True,
             is_superuser=True,
             verification_code='123456',
