@@ -5,7 +5,7 @@ from materials.models import Course, Lesson
 
 
 class User(AbstractUser):
-    username = None
+    username = models.CharField(max_length=100, verbose_name='Имя пользователя')
     email = models.EmailField(max_length=200, unique=True, verbose_name='Электронная почта')
     phone = models.CharField(max_length=35, verbose_name='phone number', null=True, blank=True)
     country = models.CharField(max_length=100, verbose_name='country', null=True, blank=True)
@@ -43,3 +43,8 @@ class Payments(models.Model):
     payment_amount = models.IntegerField(verbose_name='Сумма оплаты')
     payment_method = models.CharField(max_length=30, choices=METHOD_CHOICES, verbose_name='Метод оплаты')
 
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    is_subscribed = models.BooleanField(verbose_name='Наличие подписки')

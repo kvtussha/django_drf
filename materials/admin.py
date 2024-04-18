@@ -5,7 +5,7 @@ from materials.models import Course, Lesson
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image', 'description',)
+    list_display = ('title', 'image', 'description', )
 
 
 @admin.register(Lesson)
