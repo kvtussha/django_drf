@@ -26,15 +26,15 @@ class LessonTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_create_lesson(self):
-        url = reverse_lazy('materials:lesson-create')
-        data = {'title': 'New Lesson', 'course': self.course.id,
+        url = f'/materials/lesson/create/'
+        data = {'title': 'New Lesson', 'course': self.course.pk,
                 'video': 'https://www.youtube.com/', 'description': '-'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_retrieve_lesson(self):
         # Проверяем получение информации об уроке
-        url = f'/lesson/{self.lesson1.id}/'
+        url = f'/materials/lesson/{self.lesson1.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, LessonSerializer(self.lesson1).data)
@@ -71,6 +71,7 @@ class SubscriptionTestCase(APITestCase):
         url = '/materials/subscription/'
         data = {'course_id': self.course.id}
         response = self.client.post(url, data, format='json')
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Subscription.objects.filter(user=self.user, course=self.course).exists(), True)
 
