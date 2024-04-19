@@ -1,4 +1,3 @@
-from django.urls import reverse_lazy
 from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 
@@ -67,8 +66,7 @@ class SubscriptionTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_subscribe_to_course(self):
-        # Проверяем подписку на курс
-        url = '/materials/subscription/'
+        url = 'materials/subscription/create'
         data = {'course_id': self.course.id}
         response = self.client.post(url, data, format='json')
         print(response)
@@ -76,8 +74,7 @@ class SubscriptionTestCase(APITestCase):
         self.assertEqual(Subscription.objects.filter(user=self.user, course=self.course).exists(), True)
 
     def test_unsubscribe_from_course(self):
-        # Подписываемся на курс
-        url = '/materials/subscription/'
+        url = f'/materials/subscription/destroy/{self.course.id}'
         data = {'course_id': self.course.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

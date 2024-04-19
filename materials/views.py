@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, generics, status
+from rest_framework.generics import DestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -59,18 +60,11 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        course_id = request.data.get('course_id')
-        course = get_object_or_404(Course, id=course_id)
-        # Проверяем наличие подписки пользователя на этот курс
-        subs_item = Subscription.objects.filter(user=user, course=course)
 
-        if subs_item.exists():
-            subs_item.delete()
-            message = 'подписка удалена'
-        else:
-            Subscription.objects.create(user=user, course=course, is_subscribed=True)
-            message = 'подписка добавлена'
+class SubscriptionUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
 
-        return Response({"message": message})
+
+class SubscriptionDestroyAPIView(DestroyAPIView):
+    queryset = Subscription.objects.all()
