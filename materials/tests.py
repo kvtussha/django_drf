@@ -22,10 +22,11 @@ class LessonTestCase(APITestCase):
 
         # Создаем клиент API и аутентифицируемся как тестовый пользователь
         self.client = APIClient()
+        self.client2 = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_create_lesson(self):
-        url = f'/materials/lesson/create/'
+        url = f'lesson/create/'
         data = {'title': 'New Lesson', 'course': self.course.pk,
                 'video': 'https://www.youtube.com/', 'description': '-'}
         response = self.client.post(url, data, format='json')
@@ -33,7 +34,7 @@ class LessonTestCase(APITestCase):
 
     def test_retrieve_lesson(self):
         # Проверяем получение информации об уроке
-        url = f'/materials/lesson/{self.lesson1.id}/'
+        url = f'lesson/{self.lesson1.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, LessonSerializer(self.lesson1).data)
@@ -48,8 +49,8 @@ class LessonTestCase(APITestCase):
 
     def test_delete_lesson(self):
         # Проверяем удаление урока
-        url = f'/lesson/destroy/{self.lesson1.id}/'
-        response = self.client.delete(url)
+        url = f'lesson/destroy/{self.lesson2.id}/'
+        response = self.client2.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
@@ -60,13 +61,14 @@ class SubscriptionTestCase(APITestCase):
 
         # Создаем тестовый курс
         self.course = Course.objects.create(title='Test Course')
+        self.course2 = Course.objects.create(title='Test Course 2')
 
         # Создаем клиент API и аутентифицируемся как тестовый пользователь
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_subscribe_to_course(self):
-        url = 'materials/subscription/create'
+        url = 'subscription/create'
         data = {'course_id': self.course.id}
         response = self.client.post(url, data, format='json')
         print(response)
@@ -74,8 +76,8 @@ class SubscriptionTestCase(APITestCase):
         self.assertEqual(Subscription.objects.filter(user=self.user, course=self.course).exists(), True)
 
     def test_unsubscribe_from_course(self):
-        url = f'/materials/subscription/destroy/{self.course.id}'
-        data = {'course_id': self.course.id}
+        url = f'subscription/destroy/{self.course2.id}'
+        data = {'course_id': self.course2.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Subscription.objects.filter(user=self.user, course=self.course).exists(), False)
