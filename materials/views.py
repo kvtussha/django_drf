@@ -1,10 +1,5 @@
-import requests
-import stripe
-from django.urls import reverse
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets, generics
 from rest_framework.generics import DestroyAPIView
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from materials.models import Course, Lesson
 from materials.paginators import MaterialsPaginator
@@ -32,9 +27,8 @@ class LessonCreateAPIView(generics.CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
-    def perform_create(self, serializer):
-        new_course = serializer.save()
-        new_course.save()
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -51,7 +45,7 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
 class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsOwnerOrStaff]
+    # permission_classes = [IsOwnerOrStaff]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
@@ -61,6 +55,9 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 class SubscriptionCreateAPIView(generics.CreateAPIView):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class SubscriptionUpdateAPIView(generics.UpdateAPIView):

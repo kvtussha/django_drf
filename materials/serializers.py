@@ -7,7 +7,7 @@ from users.models import Subscription
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ('title', 'image', 'description', 'video')
+        fields = ('title', 'image', 'description', 'video', 'course')
         validators = [LessonVideoValidator(field='video')]
 
 
