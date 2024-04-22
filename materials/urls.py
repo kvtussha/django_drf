@@ -25,4 +25,4 @@ urlpatterns = [
       path('subscription/create', SubscriptionCreateAPIView.as_view(), name='subscription-create'),
       path('subscription/update/<int:pk>', SubscriptionUpdateAPIView.as_view(), name='subscription-update'),
       path('subscription/destroy/<int:pk>', SubscriptionDestroyAPIView.as_view(), name='subscription-destroy'),
-] + router.urls
+ ] + router.urls
