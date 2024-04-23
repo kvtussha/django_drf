@@ -3,9 +3,9 @@ from rest_framework.generics import DestroyAPIView
 
 from materials.models import Course, Lesson
 from materials.paginators import MaterialsPaginator
-from materials.permissions import IsOwnerOrStaff
 from materials.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from users.models import Subscription
+from materials.tasks import send_course_update_notification
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -45,7 +45,11 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
 class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    # permission_classes = [IsOwnerOrStaff]
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        # Вызываем задачу Celery для отправки уведомлений об обновлении курса
+        send_course_update_notification.delay(instance.id)
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):

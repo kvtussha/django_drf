@@ -26,7 +26,7 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
-class Payments(models.Model):
+class Payment(models.Model):
     CASH = 'Наличные'
     TRANSFER = 'Перевод на счет'
 

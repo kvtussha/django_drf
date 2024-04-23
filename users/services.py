@@ -3,7 +3,7 @@ import os
 import stripe
 from dotenv import load_dotenv
 
-from users.models import Payments
+from users.models import Payment
 
 load_dotenv()
 
@@ -18,7 +18,7 @@ def get_pay(amount_payment, user):
             payment_method_types=["card"]
         )
 
-        payment = Payments.objects.create(
+        payment = Payment.objects.create(
             user=user,
             amount_payment=amount_payment,
             stripe_id=payment_intent.id
