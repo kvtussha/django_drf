@@ -9,6 +9,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=200, unique=True, verbose_name='Электронная почта')
     phone = models.CharField(max_length=35, verbose_name='phone number', null=True, blank=True)
     country = models.CharField(max_length=100, verbose_name='country', null=True, blank=True)
+    last_login_time = models.DateTimeField(auto_now=True)
     is_password_reset = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=8)
 
