@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   web:
     build: .
@@ -9,9 +10,29 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
+      - celery
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_HOST: redis
+
   db:
     image: postgres:13
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  redis:
+    image: redis
+
+  celery:
+    build: .
+    command: celery -A myapp worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
